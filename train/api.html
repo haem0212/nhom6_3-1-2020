@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>vé tàu</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<style>
+    table, th, td {
+      border: 1px solid black;
+  }
+  th{
+    text-align: center;
+}
+button{
+    border: none;
+    color: whitesmoke;
+    text-transform: capitalize;
+    font-weight: bold;
+    padding: 4px 8px;
+}
+</style>
+<body>
+
+
+    <div class="container mt-3">
+        <h1 class="text-uppercase mb-4 text-primary text-center">Thông tin vé tàu</h1>
+        <table style="width:100%" class="mt-3 text-center">
+            <thead>
+                <tr>
+                    <th>Mã Vé</th>
+                    <th>Mã tàu</th>
+                    <th>Số Ghế</th>
+                    <th>Ngày Đi</th>
+                    <th>Ngày Đến</th>
+                    <th>Giờ Đi</th>
+                    <th>Giờ Đến</th>
+                    <th>Giá Tiền</th>
+                    
+                </tr>
+
+            </thead>
+            <tbody id="show">
+            </tbody>
+        </table>
+        <br>
+
+        <label class="text-capitalize mr-5 font-weight-bold">Mã Vé:
+        </label>
+
+        <input type="text" id="mave" class="mr-4">
+        <!--  -->
+        <label class="text-capitalize mr-5 font-weight-bold">Số Ghế:</label>
+
+        <input type="text" id="soghe" class="mr-4">
+        <button id="gettx" class="bg-primary"> Search</button>
+        <br>
+
+    </div>
+    <!-- 1 -->
+    <script>
+        var request = new XMLHttpRequest()
+        let load = ''
+        var show = document.getElementById("show");
+        request.open('GET', 'http://localhost:8080/getalltrain', true)
+        request.onload = function () {
+            var data = JSON.parse(this.response)
+            console.log(data);
+            let load = ''
+            if (request.status >= 200 && request.status < 400) {
+                data.forEach(check => {
+                    load += `<tr><th>${check.mave}</th>
+                    <th>${check.matau}</th>
+                    <th> ${check.soghe}</th>
+                    <th> ${check.ngaydi}</th>
+                     <th> ${check.ngayden}</th>
+                    <th> ${check.giodi}</th>
+                    <th> ${check.gioden}</th>
+                    <th> ${check.price}</th>
+                    
+                    </tr>`
+                })
+            } else {
+                console.log('error')
+            }
+            show.innerHTML = load;
+        }
+        request.send()
+    </script>
+    <!-- 1 -->
+    <script>
+        $(document).ready(function () {
+
+            $("#gettx").click(function () {
+                var show = document.getElementById("show");
+                $.ajax({ url: "http://localhost:8080/search?mave=" + $("#mave").val()+"&soghe=" +$("#soghe").val()},true)
+                .then(function (data) {
+                   for (let i = 0; i < data.length; i++) {
+                    load += `<tr><th>${data[i].mave}</th>
+                    <th>${data[i].matau}</th>
+                    <th>${data[i].soghe}</th>
+                    <th> ${data[i].ngaydi}</th>
+                    <th> ${data[i].ngayden}</th>
+                    <th> ${data[i].giodi}</th>
+                    <th> ${data[i].gioden}</th>
+                    <th> ${data[i].price}</th>
+                    </tr>`
+                    show.innerHTML = load;
+                }
+
+            });
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
