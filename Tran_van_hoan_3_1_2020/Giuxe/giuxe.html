@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<style>
+    table, th, td {
+      border: 1px solid black;
+  }
+  th{
+    text-align: center;
+}
+button{
+    border: none;
+    color: whitesmoke;
+    text-transform: capitalize;
+    font-weight: bold;
+    padding: 4px 8px;
+}
+</style>
+<body>
+
+
+    <div class="container mt-3">
+        <h1 class="text-uppercase mb-4 text-primary text-center">Thông tin Giữ xe</h1>
+        <table style="width:100%" class="mt-3 text-center">
+            <thead>
+                <tr>
+                    <th>Mã Xe</th>
+                    <th>Tên Xe</th>
+                    <th>Chủ Sở Hữu</th>
+                    <th>Biển Số</th>
+                </tr>
+            </thead>
+            <tbody id="show">
+            </tbody>
+        </table>
+        <br>
+        <label class="text-capitalize mr-5 font-weight-bold">Nhập tên xe :</label>
+        <input type="text" id="tx" class="ml-4">
+        <br>
+        <label class="text-capitalize mr-5 font-weight-bold">Nhập chủ sở hữu:</label>
+        <input type="text" id="cx" class="mr-4">
+        
+        <button id="getThueXe" class="bg-primary"> Get</button>
+        
+    </div>
+    <!-- Get ALL -->
+    <script>
+        var request = new XMLHttpRequest()
+        let load = ''
+        var show = document.getElementById("show");
+        request.open('GET', 'http://localhost:8080/giuxe/getall', true)
+        request.onload = function () {
+            var data = JSON.parse(this.response)
+            console.log(data);
+            let load = ''
+            if (request.status >= 200 && request.status < 400) {
+                data.forEach(check => {
+                    load += `<tr>
+                    <th>${check.maXe}</th>
+                    <th>${check.tenXe}</th>
+                    <th>${check.Tenchu}</th>
+                    <th>${check.bienso}</th>
+                    </tr>`
+                })
+            } else {
+                console.log('error')
+            }
+            show.innerHTML = load;
+        }
+        request.send()
+    </script>
+    <!--  Tìm music theo casi va tagia -->
+    <script>
+        $(document).ready(function () {
+
+            $("#getThueXe").click(function () {
+                var show = document.getElementById("show");
+                $.ajax({ url: "http://localhost:8080/giuxe/search?teXe=" + $("#tx").val()+"&Tenchu="+ $("#cx").val() },true)
+                .then(function (data) {
+                    for (let i=0; i < data.length; i++) {
+                     load += `<tr>
+                     <th>${data[i].maXe}</th>
+                     <th>${data[i].tenXe}</th>
+                     <th>${data[i].Tenchu}</th>
+                     <th>${data[i].bienso}</th>
+                     </tr>`
+                     show.innerHTML = load;
+                 }
+
+             });
+            });
+            
+        });
+    </script>
+    
+</body>
+
+</html>
