@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+<br>
+<div class="container">
+
+	<div class="row">
+		<div class="col-12 no-padding">
+        <form class="form-inline" action="#" th:action="@{/search}" method="get">
+			<input class="form-control mr-sm-2" type="search" name="tenPhim" placeholder="Ten Phim ..." />
+			<input class="form-control mr-sm-2" type="search" name="ngayChieu" placeholder="Ngay Chieu ..." />
+				<button class="btn btn-danger" type="submit">
+				<i class="fa fa-search"></i> Search
+				</button>
+		</form>
+    </div>
+	</div>
+    <div class="row mt-4">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+	        <span th:text="${successMessage}"></span>
+		        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		            <span aria-hidden="true">&times;</span>
+		        </button>
+		    </div>
+            <th:block th:unless="${#lists.isEmpty(search)}">
+			    <div class="table-responsive">
+			        <h5>List......</h5>
+			        <table class="table table-bordered table-hover">
+			            <thead>
+			            <tr>
+			            	<th>STT</th>
+			                <th>MÃ VÉ</th>
+			                <th>SỐ RẠP</th>
+			                <th>SỐ GHẾ</th>
+			                <th>TÊN PHIM</th>
+			                <th>GIỜ CHIẾU</th>
+			                <th>NGÀY CHIẾU</th>	          
+			                <th> </th>
+			            </tr>
+			            </thead>
+			            <tbody>
+			           
+			            <tr th:each="contact,iterStat : ${search}">
+			                <th scope="row" th:text="${iterStat.count}"></th>
+			                <td th:text="${contact.maVe}"></td>
+			                <td th:text="${contact.soRap}"></td>
+			                <td th:text="${contact.soGhe}"></td>
+			                <td th:text="${contact.tenPhim}"></td>
+			                <td th:text="${contact.gioChieu}"></td>
+			                <td th:text="${contact.ngayChieu}"></td>	         
+			            </tr>
+			            </tbody>
+			        </table>
+			    </div>
+			</th:block>
+        </div>
+</div>
+
+</body>
+</html>
