@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+    <style>
+		table, th, td {
+		  border: 1px solid black;
+		}
+		th{
+			text-align: center;
+		}
+		button{
+			border: none;
+			text-transform: capitalize;
+			font-weight: bold;
+			padding: 4px 8px;
+		}
+        .btw{
+            width: 160px;
+            height: 35px;
+        }
+	</style>
+</head>
+
+<body>
+
+    <div class="container mt-3">
+    <h4 class="text-capitalize mt-3">Tìm kiếm thông tin chuyến xe:</h4>
+        <label class="text-capitalize mr-2 mt-2 font-weight-bold">Nơi Đi:</label>
+        <input type="text" id="NDI" class="mr-4">
+        <label class="text-capitalize mr-2 font-weight-bold">Nơi Đến:</label>
+        <input type="text" id="NDE" class="mr-4">
+        <button id="getTX" class="bg-primary text-capitalize">Tìm Kiếm</button>
+        <br>
+        <input type="text" id="dlt" class="mr-4">
+    	<h1 class="text-uppercase mb-4 text-danger text-center">Thông tin chuyến xe</h1>
+        <table style="width:100%" class="mt-3 text-center">
+            <thead>
+                <tr>
+                	<th>Mã Xe</th>
+                    <th>Nơi Đi</th>
+                    <th>Nơi Đến</th>
+                    <th>Ngày Đi</th>
+                    <th>Giờ Đi</th>
+                    <th>Giờ Đến</th>
+                    <th>Giá Tiền</th>
+                    <th>Số Ghế</th>
+                    <th>Thời Gian Đi</th>
+                </tr>
+            </thead>
+            <tbody id="aaa">
+            </tbody>
+        </table>
+        
+        
+        
+    </div>
+    <!-- Lấy các tất cả các thông tin của chuyến xe -->
+    <script>
+        var request = new XMLHttpRequest()
+        let load = ''
+        var aaa = document.getElementById("aaa");
+        request.open('GET', 'http://localhost:8080/getAllThueXe', true)
+        request.onload = function () {
+            var data = JSON.parse(this.response)
+            console.log(data);
+            let load = ''
+            if (request.status >= 200 && request.status < 400) {
+                data.forEach(check => {
+                    load += `<tr><th>${check.maXe}</th>
+                            <th>${check.noiDi}</th>
+                            <th> ${check.noiDen}</th>
+                            <th> ${check.ngayDi}</th>
+                            <th> ${check.gioDi}</th>
+                            <th> ${check.gioDen}</th>
+                            <th> ${check.giaTien}</th>
+                            <th> ${check.soGhe}</th>
+                            <th> ${check.ThoiGianDi}</th>
+                            </tr>`
+                })
+            } else {
+                console.log('error')
+            }
+            aaa.innerHTML = load;
+        }
+        request.send()
+    </script>
+    <!-- Tìm kiếm chuyến xe theo nơi đi, nơi đến và ngày đi -->
+    <script>
+        $(document).ready(function () {
+  	
+            $("#getTX").click(function () {
+                var aaa = document.getElementById("aaa");
+                $.ajax({ url: "http://localhost:8080//getAllAdAndTime?noiDi="+ $("#NDI").val() +"&noiDen=" +$("#NDE").val() +"&ngayDi=" +$("#NGD").val() },true)
+                    .then(function (data) {
+                       for (let i = 0; i < data.length; i++) {
+                            load += `<tr><th>${data[i].maXe}</th>
+                            <th> ${data[i].noiDi}</th>
+                            <th> ${data[i].noiDen}</th>
+                            <th> ${data[i].ngayDi}</th>
+                            <th> ${data[i].gioDi}</th>
+                            <th> ${data[i].gioDen}</th>
+                            <th> ${data[i].giaTien}</th>
+                            <th> ${data[i].soGhe}</th>
+                            <th> ${data[i].ThoiGianDi}</th>
+                            </tr>`
+                        aaa.innerHTML = load;
+                       }
+                    });
+            });
+            
+        });
+    </script>
+   
+</body>
+
+</html>
